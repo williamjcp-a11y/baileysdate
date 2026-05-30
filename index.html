@@ -39,7 +39,7 @@
   /* film grain */
   body::after{
     content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.05;mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'%3E%3CfeDisplacementMap in='SourceGraphic' scale='33'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
   }
   /* drifting ember glow */
   .glow{position:fixed;inset:0;z-index:0;pointer-events:none;}
@@ -144,11 +144,6 @@
   .feedback.no{color:var(--ember-soft);}
   .feedback.yes{color:var(--gold);}
 
-  .hintbtn{background:none;border:none;color:var(--cream-dim);font-family:"Space Mono",monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;cursor:pointer;opacity:.7;transition:opacity .2s;}
-  .hintbtn:hover{opacity:1;}
-  .hint{display:none;margin-top:10px;font-style:italic;color:var(--gold);font-size:.92rem;line-height:1.5;}
-  .hint.on{display:block;animation:rise .5s forwards;}
-
   /* ---- REVEAL ---- */
   .reveal{
     position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;padding:26px;
@@ -160,7 +155,7 @@
   .reveal .place{font-size:clamp(2.4rem,12vw,3.4rem);line-height:1.02;font-weight:600;margin:16px 0 4px;letter-spacing:-.02em;}
   .reveal .addr{font-family:"Space Mono",monospace;font-size:.78rem;letter-spacing:.06em;color:var(--cream-dim);line-height:1.7;}
   .reveal .msg{font-style:italic;color:var(--gold);font-size:1.15rem;line-height:1.55;margin:24px 0 8px;}
-  .reveal a.maps{display:inline-block;margin-top:18px;font-family:"Space Mono",monospace;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:#1a0c04;background:var(--gold);padding:13px 26px;border-radius:12px;text-decoration:none;transition:transform .15s;box-shadow:0 8px 20px -10px rgba(244,201,122,.5);}
+  .reveal a.maps{display:inline-block;margin-top:18px;font-family:"Space Mono",monospace;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:#1a0c04;background:var(--gold);padding:13px 22px;border-radius:12px;text-decoration:none;transition:transform .15s;font-weight:600;}
   .reveal a.maps:active{transform:translateY(1px) scale(.98);}
   .spark{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--ember);pointer-events:none;}
 
@@ -176,7 +171,7 @@
 
   <main class="wrap">
     <div class="kicker">⊹ a date is waiting ⊹</div>
-    <p class="lead">I got dropped on the head as a kid and now <b>it's</b> your problem</p>
+    <p class="lead">I got dropped on the head as a child and now <b>it's</b> your problem</p>
     <div class="clockwrap">
       <div class="clocklabel">⧖ countdown to liftoff</div>
       <div class="clock">
@@ -219,8 +214,6 @@
           <button class="btn" id="guessBtn">lock it in</button>
         </div>
         <div class="feedback" id="feedback"></div>
-        <button class="hintbtn" id="hintbtn">need a hint?</button>
-        <div class="hint" id="hint"></div>
       </div>
     </section>
   </main>
@@ -381,7 +374,7 @@ function enableCompass(){
 /* ---------- GUESS ---------- */
 const fb=document.getElementById('feedback');
 const norm=s=>s.toLowerCase().replace(/[^a-z]/g,'');
-const noMsgs=["Not quite — keep looking 👀","Nope, but I love the confidence","Cold guess. Try the hint?","That's not it… closer though?"];
+const noMsgs=["Not quite — keep looking 👀","Nope, but I love the confidence","Cold guess.","That's not it… closer though?"];
 function checkGuess(){
   const v=document.getElementById('guessInput').value;
   if(!v.trim()){return;}
@@ -393,14 +386,6 @@ function checkGuess(){
 }
 document.getElementById('guessBtn').addEventListener('click',checkGuess);
 document.getElementById('guessInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkGuess();});
-
-/* ---------- HINT ---------- */
-document.getElementById('hintbtn').addEventListener('click',function(){
-  const h=document.getElementById('hint');
-  h.textContent='no hint for you';
-  h.classList.add('on');
-  this.disabled=true;
-});
 
 /* ---------- WIN / REVEAL ---------- */
 function win(){
